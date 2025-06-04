@@ -11,7 +11,8 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { TaskService } from './task.service';
-import { Task } from './entities/task.entity';
+import { CreateTaskDto } from './dto/create-task.dto/create-task.dto';
+import { UpdateTaskDto } from './dto/update-task.dto/update-task.dto';
 
 @Controller('tasks')
 export class TaskController {
@@ -28,15 +29,12 @@ export class TaskController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createTaskDto: Task) {
+  create(@Body() createTaskDto: CreateTaskDto) {
     return this.taskService.createTask(createTaskDto);
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateTaskDto: Record<string, string>,
-  ) {
+  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
     return this.taskService.updateTask(Number(id), updateTaskDto);
   }
 
