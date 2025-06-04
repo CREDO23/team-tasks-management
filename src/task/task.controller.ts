@@ -23,8 +23,8 @@ export class TaskController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.taskService.getTaskById(Number(id));
+  findOne(@Param('id') id: number) {
+    return this.taskService.getTaskById(id);
   }
 
   @Post()
@@ -34,12 +34,12 @@ export class TaskController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.taskService.updateTask(Number(id), updateTaskDto);
+  update(@Param('id') id: number, @Body() updateTaskDto: UpdateTaskDto) {
+    return this.taskService.updateTask(id, updateTaskDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.taskService.deleteTask(Number(id));
+  remove(@Param('id') id: number) {
+    return this.taskService.deleteTask(id);
   }
 }
