@@ -1,6 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TaskModule } from './task/task.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './user/user.module';
+import { RoleModule } from './user/role/role.module';
+import { RolePermissionModule } from './user/role/role-permission/role-permission.module';
+import { TaskStatusModule } from './task/task-status/task-status.module';
+import { TaskPriorityModule } from './task/task-priority/task-priority.module';
 
 @Module({
   imports: [
@@ -15,6 +20,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    UserModule,
+    RoleModule,
+    RolePermissionModule,
+    TaskStatusModule,
+    TaskPriorityModule,
   ],
 })
 export class AppModule {}

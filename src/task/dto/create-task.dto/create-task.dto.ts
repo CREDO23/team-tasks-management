@@ -1,7 +1,10 @@
 import { IsOptional, IsString } from 'class-validator';
+import { OmittedFieldsOnCreate } from 'src/contracts/common';
 import { TaskInterface } from 'src/contracts/task/task.interface';
 
-export class CreateTaskDto implements Omit<TaskInterface, 'id'> {
+export class CreateTaskDto
+  implements Omit<TaskInterface, OmittedFieldsOnCreate>
+{
   @IsString()
   readonly title: string;
   @IsString()
