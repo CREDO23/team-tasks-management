@@ -29,7 +29,7 @@ export class TaskEntity implements TaskInterface {
   status: string;
 
   @ManyToMany(() => UserEntity, (user) => user.tasks)
-  assignees: string[];
+  assignees: UserEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

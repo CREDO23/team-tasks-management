@@ -1,4 +1,4 @@
-import { RoleEnum } from 'src/contracts/user/role/role.enums';
+import { RoleEnum } from 'src/contracts/role/role.enums';
 import { UserInterface } from 'src/contracts/user/user.interface';
 import { TaskEntity } from 'src/task/task.entity';
 import {
@@ -34,7 +34,7 @@ export class UserEntity implements UserInterface {
 
   @JoinTable({ name: 'user_tasks' })
   @ManyToMany(() => TaskEntity, (task) => task.assignees)
-  tasks: string[];
+  tasks: TaskEntity[];
 
   @CreateDateColumn()
   createdAt: Date;
