@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { UpdateTaskDto } from './DTOs/update-task.dto';
 import { UserEntity } from 'src/user/user.entity';
 import { TaskStatusEnum } from 'src/contracts/task/task.enums';
+import { PaginationQueryDto } from 'src/common/DTOs/pagination-query.dto';
 
 @Injectable()
 export class TaskService {
@@ -17,11 +18,13 @@ export class TaskService {
     private userRepository: Repository<UserEntity>,
   ) {}
 
-  async getAllTasks() {
+  async getAllTasks(paginationQuery: PaginationQueryDto) {
     return this.taskRepository.find({
       relations: {
         assignees: true,
       },
+      skip: paginationQuery.offset,
+      take: paginationQuery.limit,
     });
   }
 

@@ -8,18 +8,20 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './DTOs/create-task.dto';
 import { UpdateTaskDto } from './DTOs/update-task.dto';
+import { PaginationQueryDto } from 'src/common/DTOs/pagination-query.dto';
 
 @Controller('tasks')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
   @Get()
-  findAll() {
-    return this.taskService.getAllTasks();
+  findAll(@Query() paginationQuery: PaginationQueryDto) {
+    return this.taskService.getAllTasks(paginationQuery);
   }
 
   @Get(':id')
