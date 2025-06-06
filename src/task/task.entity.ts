@@ -28,7 +28,9 @@ export class TaskEntity implements TaskInterface {
   })
   status: string;
 
-  @ManyToMany(() => UserEntity, (user) => user.tasks)
+  @ManyToMany(() => UserEntity, (user) => user.tasks, {
+    cascade: true,
+  })
   assignees: UserEntity[];
 
   @CreateDateColumn()

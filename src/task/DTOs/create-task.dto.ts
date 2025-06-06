@@ -1,10 +1,6 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { OmittedFieldsOnCreate } from 'src/contracts/common';
-import { TaskInterface } from 'src/contracts/task/task.interface';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class CreateTaskDto
-  implements Omit<TaskInterface, OmittedFieldsOnCreate>
-{
+export class CreateTaskDto {
   @IsString()
   @IsNotEmpty()
   readonly title: string;
@@ -18,4 +14,9 @@ export class CreateTaskDto
   @IsNotEmpty()
   @IsOptional()
   readonly status: string;
+
+  @IsOptional()
+  @IsString({ each: true })
+  @IsEmail(undefined, { each: true })
+  assignees?: string[];
 }
