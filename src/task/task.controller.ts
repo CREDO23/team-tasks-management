@@ -15,6 +15,7 @@ import { TaskService } from './task.service';
 import { CreateTaskDto } from './DTOs/create-task.dto';
 import { UpdateTaskDto } from './DTOs/update-task.dto';
 import { PaginationQueryDto } from 'src/common/DTOs/pagination-query.dto';
+import { ParseIntPipe } from 'src/common/pipes/parse-int.pipe';
 
 @Controller('tasks')
 export class TaskController {
@@ -26,7 +27,7 @@ export class TaskController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.taskService.getTaskById(id);
   }
 
