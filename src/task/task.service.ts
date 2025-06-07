@@ -1,57 +1,96 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Task } from './entities/task.entity';
-import { CreateTaskDto } from './dto/create-task.dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto/update-task.dto';
+import { CreateTaskDto } from './DTOs/create-task.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { TaskEntity } from './task.entity';
+import { Repository } from 'typeorm';
+import { UpdateTaskDto } from './DTOs/update-task.dto';
+import { UserEntity } from 'src/user/user.entity';
+import { TaskStatusEnum } from 'src/contracts/task/task.enums';
+import { PaginationQueryDto } from 'src/common/DTOs/pagination-query.dto';
 
 @Injectable()
 export class TaskService {
-  private tasks: Task[] = [
-    {
-      id: 1,
-      title: 'Task 1',
-      description: 'This is task 1',
-      status: 'Pending',
-    },
-    {
-      id: 2,
-      title: 'Task 2',
-      description: 'This is task 2',
-      status: 'In Progress',
-    },
-    {
-      id: 3,
-      title: 'Task 3',
-      description: 'This is task 3',
-      status: 'Completed',
-    },
-  ];
+  constructor(
+    @InjectRepository(TaskEntity)
+    private taskRepository: Repository<TaskEntity>,
 
-  getAllTasks() {
-    return this.tasks;
+    @InjectRepository(UserEntity)
+    private userRepository: Repository<UserEntity>,
+  ) {}
+
+  async getAllTasks(paginationQuery: PaginationQueryDto) {
+    return this.taskRepository.find({
+      relations: {
+        assignees: true,
+      },
+      skip: paginationQuery.offset,
+      take: paginationQuery.limit,
+    });
   }
 
-  getTaskById(id: number) {
-    const task = this.tasks.find((task) => task.id === id);
+  async getTaskById(id: number) {
+    const task = await this.taskRepository.findOne({
+      where: { id },
+      relations: {
+        assignees: true,
+      },
+    });
 
-    if (task) {
-      return task;
-    } else {
+    if (!task) {
       throw new NotFoundException(`Task #${id} not found`);
     }
+
+    return task;
   }
 
-  createTask(task: CreateTaskDto) {
-    this.tasks.push({ ...task, id: this.tasks.length });
+  async createTask(task: CreateTaskDto) {
+    const assignees =
+      task.assignees &&
+      (await Promise.all(
+        task.assignees.map((email) => this.preloadAssigneeByEmail(email)),
+      ));
+
+    const newTask = this.taskRepository.create({
+      ...task,
+      status: task.status ?? TaskStatusEnum.BACKLOG,
+      assignees,
+    });
+    return this.taskRepository.save(newTask);
   }
 
-  updateTask(id: number, task: UpdateTaskDto) {
-    const existingTask = this.tasks.find((t) => t.id === id);
-    if (existingTask) {
-      Object.assign(existingTask, task);
+  async updateTask(id: number, data: UpdateTaskDto) {
+    const assignees =
+      data.assignees &&
+      (await Promise.all(
+        data.assignees.map((email) => this.preloadAssigneeByEmail(email)),
+      ));
+
+    const task = await this.taskRepository.preload({
+      id,
+      ...data,
+      assignees,
+    });
+
+    if (!task) {
+      throw new NotFoundException(`Task #${id} not found`);
     }
+    return this.taskRepository.save(task);
   }
 
-  deleteTask(id: number) {
-    this.tasks = this.tasks.filter((task) => task.id !== id);
+  async deleteTask(id: number) {
+    const task = await this.getTaskById(id);
+    return this.taskRepository.remove(task);
+  }
+
+  async preloadAssigneeByEmail(email: string) {
+    const assignee = await this.userRepository.findOne({
+      where: { email },
+    });
+
+    if (!assignee) {
+      throw new NotFoundException(`User with email ${email} not found`);
+    }
+
+    return assignee;
   }
 }
