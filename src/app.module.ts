@@ -8,6 +8,7 @@ import { TaskStatusModule } from './task-status/task-status.module';
 import { TaskPriorityModule } from './task-priority/task-priority.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { CommonModule } from './common/common.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -38,6 +39,7 @@ import * as Joi from '@hapi/joi';
     TaskStatusModule,
     TaskPriorityModule,
     AuthModule,
+    CommonModule,
   ],
 })
 export class AppModule {}

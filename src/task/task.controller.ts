@@ -19,6 +19,7 @@ import { PaginationQueryDto } from 'src/common/DTOs/pagination-query.dto';
 @Controller('tasks')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
+
   @Get()
   findAll(@Query() paginationQuery: PaginationQueryDto) {
     return this.taskService.getAllTasks(paginationQuery);
