@@ -1,2 +1,2 @@
-# team-tasks-management
-Team tasks management api with nestjs
+# Taskible
+Team tasks management api with nestjs 
