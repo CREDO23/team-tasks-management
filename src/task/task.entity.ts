@@ -5,6 +5,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Generated,
+  Index,
   ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -15,8 +17,13 @@ export class TaskEntity implements TaskInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index()
   @Column()
   title: string;
+
+  @Column()
+  @Generated('increment')
+  taskNumber: number;
 
   @Column({ nullable: true })
   description: string;
