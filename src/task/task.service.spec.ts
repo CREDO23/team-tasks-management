@@ -26,23 +26,24 @@ describe('TaskService', () => {
   let taskRepository: MockRepository<TaskEntity>;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        TaskService,
-        { provide: DataSource, useValue: {} },
-        {
-          provide: getRepositoryToken(TaskEntity),
-          useValue: mockRepositoryFactory(),
-        },
-        {
-          provide: getRepositoryToken(UserEntity),
-          useValue: mockRepositoryFactory(),
-        },
-      ],
-    }).compile();
+    const taskServiceTestingModule: TestingModule =
+      await Test.createTestingModule({
+        providers: [
+          TaskService,
+          { provide: DataSource, useValue: {} },
+          {
+            provide: getRepositoryToken(TaskEntity),
+            useValue: mockRepositoryFactory(),
+          },
+          {
+            provide: getRepositoryToken(UserEntity),
+            useValue: mockRepositoryFactory(),
+          },
+        ],
+      }).compile();
 
-    taskService = module.get<TaskService>(TaskService);
-    taskRepository = module.get<MockRepository<TaskEntity>>(
+    taskService = taskServiceTestingModule.get<TaskService>(TaskService);
+    taskRepository = taskServiceTestingModule.get<MockRepository<TaskEntity>>(
       getRepositoryToken(TaskEntity),
     );
   });
@@ -73,6 +74,7 @@ describe('TaskService', () => {
 
         try {
           await taskService.getTaskById(taskId);
+          expect(false).toBeTruthy(); // If we hit this line , it means that the test failed -> the exception was not thrown
         } catch (error) {
           expect(error).toBeInstanceOf(NotFoundException);
           expect(error.message).toBe(`Task #${taskId} not found`);

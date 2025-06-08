@@ -15,7 +15,7 @@ export class CreateTaskDto {
   @IsString()
   @IsNotEmpty()
   @IsOptional()
-  readonly description: string;
+  readonly description?: string;
 
   @ApiProperty({
     description: 'The status of the task',
@@ -23,7 +23,7 @@ export class CreateTaskDto {
   @IsString()
   @IsNotEmpty()
   @IsOptional()
-  readonly status: string;
+  readonly status?: string;
 
   @ApiProperty({
     description: 'The assignees of the task',

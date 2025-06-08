@@ -9,3 +9,12 @@ services:
     environment:
       POSTGRES_PASSWORD: pas123
       POSTGRES_DB: team_tasks_management
+
+  db-test:
+    image: postgres
+    restart: always
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_PASSWORD: pas123
+      POSTGRES_DB: team_tasks_management_test
