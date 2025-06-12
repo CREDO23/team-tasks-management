@@ -6,9 +6,9 @@ import { RoleModule } from './role/role.module';
 import { RolePermissionModule } from './role-permission/role-permission.module';
 import { TaskStatusModule } from './task-status/task-status.module';
 import { TaskPriorityModule } from './task-priority/task-priority.module';
-import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { CommonModule } from './common/common.module';
+import { IamModule } from './iam/iam.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -38,8 +38,8 @@ import * as Joi from '@hapi/joi';
     RolePermissionModule,
     TaskStatusModule,
     TaskPriorityModule,
-    AuthModule,
     CommonModule,
+    IamModule,
   ],
 })
 export class AppModule {}
