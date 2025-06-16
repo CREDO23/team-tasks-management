@@ -27,13 +27,14 @@ export class UserService {
       const userEntity = this.userRepository.create(user);
       return await this.userRepository.save(userEntity);
     } catch (error: unknown) {
-      console.log('ERRRRRRR', error);
       const CONFLICT_ERROR_CODE = '23505';
       if (error instanceof Error) {
         if ('code' in error) {
           if (error.code === CONFLICT_ERROR_CODE) {
             // Unique constraint violation
-            throw new ConflictException('User already exists');
+            throw new ConflictException(
+              `User with email '${user.email}' already exists`,
+            );
           } else {
             throw error;
           }
