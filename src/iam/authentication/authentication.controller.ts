@@ -17,6 +17,15 @@ export class AuthenticationController {
   @HttpCode(HttpStatus.OK)
   signin(@Body() userData: SigninDto) {
     return this.signinService.signin(userData);
+
+    // If you want to use cookies
+    // const accessToken = await this.signinService.signin(userData);
+
+    // response.cookie('access_token', accessToken, {
+    //   httpOnly: true,
+    //   sameSite: true,
+    //   secure: true,
+    // });
   }
 
   @PublicResource()
