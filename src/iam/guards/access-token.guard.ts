@@ -33,6 +33,7 @@ export class AccessTokenGuard implements CanActivate {
         secret: this.jwtConfiguration.secret,
       });
       request[REQUEST_USER_KEY] = payload;
+      // TODO : Extends the request object in the express namespace with 'user' property
     } catch {
       throw new UnauthorizedException();
     }
