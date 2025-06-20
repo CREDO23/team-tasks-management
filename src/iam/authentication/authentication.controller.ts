@@ -2,8 +2,9 @@ import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { SigninService } from './signin.service';
 import { SignupService } from './signup.service';
 import { SigninDto } from './DTOs/signin.dto';
-import { PublicResource } from 'src/common/decorators/public-ressource-metadata';
 import { SignupDto } from './DTOs/signup.dto';
+import { Auth } from '../decorators/auth.decorator';
+import { AuthType } from '../enums/auth-types.enums';
 
 @Controller('auth')
 export class AuthenticationController {
@@ -12,7 +13,7 @@ export class AuthenticationController {
     private signupService: SignupService,
   ) {}
 
-  @PublicResource()
+  @Auth(AuthType.None)
   @Post('signin')
   @HttpCode(HttpStatus.OK)
   signin(@Body() userData: SigninDto) {
@@ -28,7 +29,7 @@ export class AuthenticationController {
     // });
   }
 
-  @PublicResource()
+  @Auth(AuthType.None)
   @Post('signup')
   @HttpCode(HttpStatus.CREATED)
   signup(@Body() userData: SignupDto) {
