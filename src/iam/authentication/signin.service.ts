@@ -36,6 +36,7 @@ export class SigninService {
 
     const accessToken = await this.jwtService.signAsync(
       {
+        sub: doesUserExist.id,
         userId: doesUserExist.id,
         email: doesUserExist.email,
       },
